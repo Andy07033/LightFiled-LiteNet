@@ -1,0 +1,13 @@
+{
+  "width": 512,
+  "height": 512,
+  "fx": 1462.857142857143,
+  "fy": 1462.857142857143,
+  "cx": 255.5,
+  "cy": 255.5,
+  "disparity_offset_px": 6.383376623376623,
+  "disparity_sign": 1,
+  "angular_step": 2,
+  "frame_id": "lf_camera_optical_frame",
+  "selected_baseline_m": 0.048
+}

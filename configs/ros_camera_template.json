@@ -1,0 +1,13 @@
+{
+  "width": 512,
+  "height": 512,
+  "fx": null,
+  "fy": null,
+  "cx": null,
+  "cy": null,
+  "disparity_offset_px": null,
+  "disparity_sign": null,
+  "angular_step": 2,
+  "frame_id": "lf_camera_optical_frame",
+  "selected_baseline_m": null
+}

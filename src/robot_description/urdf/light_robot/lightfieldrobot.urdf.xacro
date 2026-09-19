@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
+<!-- Include the base URDF -->
+<xacro:include filename="$(find robot_description)/urdf/light_robot/base.urdf.xacro"/>
+<!-- Include the camera sensor URDF -->
+<xacro:include filename="$(find robot_description)/urdf/light_robot/sensor/camera.urdf.xacro"/>
+<!-- Include the IMU sensor URDF -->
+<xacro:include filename="$(find robot_description)/urdf/light_robot/sensor/imu.urdf.xacro"/>
+<xacro:include filename="$(find robot_description)/urdf/light_robot/actuator/wheel.urdf.xacro"/>
+<xacro:include filename="$(find robot_description)/urdf/light_robot/actuator/caster.urdf.xacro"/>
+<!-- Include the gazebo control plugin -->
+<xacro:include filename="$(find robot_description)/urdf/light_robot/plugins/gazebo_control_plugin.xacro"/>
+<xacro:include filename="$(find robot_description)/urdf/light_robot/plugins/gazebo_sensor_plugin.xacro"/>
+<xacro:include filename="$(find robot_description)/urdf/light_robot/lightfieldrobot_control.xacro"/>
+
+
+<xacro:base_xacro length="0.12" radius="0.1"/>
+<xacro:IMU_xacro xyz="0 0 0.02"/>
+<joint name="camera_mount_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_stand_link"/>
+    <!-- cylinder length 0.12 -> top surface at z=0.06; board sits just above it -->
+    <origin xyz="0.1 0 0.0" rpy="0 ${pi/2} 0"/>
+</joint>
+
+<xacro:wheel_xacro wheel_name="left_wheel" xyz="0 0.10 -0.06"/>
+<xacro:wheel_xacro wheel_name="right_wheel" xyz="0 -0.10 -0.06"/>
+<xacro:caster_xacro caster_name="front_caster" xyz="0.08 0 -0.076"/>
+<xacro:caster_xacro caster_name="back_caster" xyz="-0.08 0 -0.076"/>
+
+<!-- <xacro:gazebo_control_plugin/> -->
+<xacro:gazebo_sensor_plugins/>
+<xacro:mybot_ros2_control/>
+
+</robot>

@@ -1,0 +1,13 @@
+{
+  "width": 512,
+  "height": 512,
+  "fx": 274.53,
+  "fy": 274.53,
+  "cx": 256.0,
+  "cy": 256.0,
+  "disparity_offset_px": 0.0,
+  "disparity_sign": 1,
+  "angular_step": 2,
+  "frame_id": "camera_4_optical_link",
+  "selected_baseline_m": 0.006
+}

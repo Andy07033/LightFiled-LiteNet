@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>camera_subscriber</name>
+  <version>0.0.0</version>
+  <description>订阅 3x3 光场相机阵列的 9 路图像话题，运行 LiteNet ONNX 推理并发布深度与点云。</description>
+  <maintainer email="2680789712@qq.com">yaowei</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>cv_bridge</depend>
+  <depend>libopencv-dev</depend>
+
+  <!-- Python 推理侧 -->
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>diagnostic_msgs</exec_depend>
+  <!-- onnxruntime 没有对应的 rosdep key，用 pip 装到用户目录：
+       python3 -m pip install 加上 user 选项 onnxruntime（GPU 机器装 onnxruntime-gpu）。
+       注意 XML 注释里不能出现连续两个减号，所以这里不写完整命令。 -->
+
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

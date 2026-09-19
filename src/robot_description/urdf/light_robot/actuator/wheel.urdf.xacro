@@ -1,0 +1,52 @@
+<?xml version="1.0"?> <!-- 这是版本提示 -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="$(find robot_description)/urdf/light_robot/common_inertia.xacro"/>
+    <xacro:macro name ="wheel_xacro" params="wheel_name xyz">
+        <!-- 机器人的IMU，惯性测量单元传感器 -->
+        <link name="${wheel_name}_link">
+            <!-- 部件的外观描述 -->
+            <visual>
+                <!-- 沿着自己几何中心偏移和旋转 -->
+                <origin xyz="0 0 0" rpy="${pi/2} 0.0 0.0"/>
+                <!-- 几何形状 -->
+                <geometry>
+                    <!-- 立方体 -->
+                    <cylinder radius="0.032" length="0.04"/> 
+                </geometry>
+                <!-- 材质颜色 -->
+                <material name="yellow">
+                    <color rgba="1.0 1.0 0.0 0.8"/>
+                </material>
+            </visual>
+            <collision>
+                    <!-- 沿着自己几何中心偏移和旋转 -->
+                    <origin xyz="0 0 0" rpy="${pi/2} 0.0 0.0"/>
+                    <!-- 几何形状 -->
+                    <geometry>
+                        <!-- 立方体 -->
+                        <cylinder radius="0.032" length="0.04"/> 
+                    </geometry>
+            </collision>
+            <xacro:cylinder_inertia m = "0.05" r="0.032" h="0.04" />
+        </link>
+
+        <!-- 机器人的关节，用于组合机器人的部件, type是可动还是不可动 -->
+        <joint name="${wheel_name}_link_joint" type="continuous">
+            <!-- 关节的父部件 -->
+            <parent link="base_link"/>
+            <!-- 关节的子部件 -->
+            <child link="${wheel_name}_link"/>
+            <!-- 关节的偏移和旋转 -->
+            <origin xyz="${xyz}" rpy="0.0 0.0 0.0"/>
+            <axis xyz="0 1 0"/>
+        </joint>
+        <gazebo reference="${wheel_name}_link">
+            <!-- gazebo可以修改该物体的属性mu1 切向摩擦系数，mu2 法向摩擦系数 ，kp 弹性系数 ，kd 阻尼系数 -->
+            <mu1 value="20.0"/> 
+            <mu2 value="20.0"/>
+            <kp value="1000000000.0"/>
+            <kd value="1.0"/>
+            <material>Gazebo/Yellow</material>
+        </gazebo>
+    </xacro:macro>
+</robot>

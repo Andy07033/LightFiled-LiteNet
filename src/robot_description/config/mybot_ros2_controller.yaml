@@ -1,0 +1,25 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+    use_sim_time: true
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+      publish_rate: 50
+    mybot_diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+      publish_rate: 50
+
+mybot_diff_drive_controller:
+  ros__parameters:
+    left_wheel_names:  [left_wheel_link_joint]
+    right_wheel_names: [right_wheel_link_joint]
+    wheel_separation: 0.2          # 轮心 ±0.10 → 0.20
+    wheel_radius: 0.032            # wheel.urdf.xacro 里 radius="0.032"
+    base_frame_id: base_footprint
+    odom_frame_id: odom
+    enable_odom_tf: true
+    use_stamped_vel: false         # 与 <remapping> cmd_vel_unstamped:=/cmd_vel 对应
+    linear.x.max_velocity: 0.3
+    angular.z.max_velocity: 1.0
+    pose_covariance_diagonal:  [0.001,0.001,1e6,1e6,1e6,0.01]
+    twist_covariance_diagonal: [0.001,0.001,1e6,1e6,1e6,0.01]

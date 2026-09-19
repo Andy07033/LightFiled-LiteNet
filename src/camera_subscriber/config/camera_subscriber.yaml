@@ -1,0 +1,20 @@
+/**:
+  ros__parameters:
+    # 相机路数（当前机器人是 3x3 的 9 目光场阵列）
+    camera_count: 9
+    # 话题拼法：<topic_prefix><index><topic_suffix>
+    #   -> /camera_0/image_raw ... /camera_8/image_raw
+    topic_prefix: "camera_"
+    topic_suffix: "/image_raw"
+    # gazebo_ros_camera 用 SensorDataQoS 发布，订阅端必须 best_effort 才匹配得上
+    qos_reliability: "best_effort"
+    qos_depth: 5
+    # 每多少秒打印一次 9 路的帧率/分辨率/延迟统计
+    stats_period_sec: 5.0
+    # 超过这么久没收到新帧就告警
+    stale_timeout_sec: 1.0
+    # 9 路时间戳跨度小于该值才算"同一时刻"，光场节点才拿这组做推理
+    # 10 Hz 相机取半帧周期；仿真被拖慢时各路会落到不同仿真步（实测跨度可到 0.2 s），
+    # 那时的取舍是：调大它（允许轻微运动误差）还是先解决仿真实时率。
+    sync_tolerance_sec: 0.05
+    use_sim_time: true

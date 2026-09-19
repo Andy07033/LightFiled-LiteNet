@@ -1,0 +1,10 @@
+#!/usr/bin/python3
+# 光场推理节点入口。
+#
+# 这里故意写死 /usr/bin/python3 而不是 /usr/bin/env python3：
+# onnxruntime 是装在系统解释器上的，而本机 .bashrc 会自动激活 conda base，
+# 用 env python3 有可能落到 miniconda 的解释器上，导致 import onnxruntime 失败。
+from camera_subscriber.lightfield_node import main
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profiles xmlns="http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles">
+  <!-- WSL2 镜像网络下组播/共享内存发现常失效，用纯 UDPv4 绕开。
+       用法：
+         export FASTRTPS_DEFAULT_PROFILES_FILE=\
+           $(ros2 pkg prefix camera_subscriber)/share/camera_subscriber/config/fastdds_udp_only.xml
+       代价：失去共享内存零拷贝，9 路图像会多几次内存拷贝。 -->
+  <transport_descriptors>
+    <transport_descriptor>
+      <transport_id>udp_transport</transport_id>
+      <type>UDPv4</type>
+    </transport_descriptor>
+  </transport_descriptors>
+  <participant profile_name="udp_only" is_default_profile="true">
+    <rtps>
+      <userTransports>
+        <transport_id>udp_transport</transport_id>
+      </userTransports>
+      <useBuiltinTransports>false</useBuiltinTransports>
+    </rtps>
+  </participant>
+</profiles>

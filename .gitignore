@@ -1,0 +1,26 @@
+# ---- ROS 2 / colcon 构建产物（不入库）----
+build/
+install/
+log/
+
+# ---- Python 虚拟环境 ----
+venv/
+.venv/
+env/
+
+# ---- Python 缓存与打包产物 ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# ---- colcon / ROS 运行时 ----
+.colcon/
+.ros/
+*.log
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+.DS_Store
+__MACOSX/

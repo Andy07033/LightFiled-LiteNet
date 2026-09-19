@@ -1,0 +1,116 @@
+<?xml version="1.0"?> <!-- 这是版本提示 -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="$(find robot_description)/urdf/light_robot/common_inertia.xacro"/>
+
+    <!-- 定义整个相机阵列 -->
+    <xacro:property name="camera_spacing" value="0.006"/> <!-- 相机间距6mm -->
+    <xacro:property name="dense_step" value="${camera_spacing / 2}"/> <!-- 虚拟 dense 步长 s = 3 mm -->
+    <xacro:property name="broad_size" value="0.02"/> <!-- 底板 20mm × 20mm -->
+    <xacro:property name="cam_size" value="0.004"/> <!-- 相机外观 4mm(要小于间距,否则互相穿模) -->
+
+    
+    <!-- 机器人的camera底板 -->
+    <link name="camera_stand_link">
+        <!-- 部件的外观描述 -->
+        <visual>
+            <!-- 沿着自己几何中心偏移和旋转 -->
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+            <!-- 几何形状 -->
+            <geometry>
+                <!-- 立方体 -->
+                <box size="${broad_size} ${broad_size} 0.002"/>
+            </geometry>
+            <!-- 材质颜色 -->
+            <material name="black">
+                <color rgba="0.4 0.4 0.4 1"/>
+            </material>
+        </visual>
+        <collision>
+                <!-- 沿着自己几何中心偏移和旋转 -->
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <!-- 几何形状 -->
+                <geometry>
+                    <!-- 立方体 -->
+                    <box size="${broad_size} ${broad_size} 0.002"/>
+                </geometry>
+                <!-- 材质颜色 -->
+                <material name="black">
+                    <color rgba="0.4 0.4 0.4 1"/>
+                </material>
+        </collision>
+        <xacro:box_inertia m = "0.1" w="${broad_size}" d="${broad_size}" h="0.002" />
+    </link>
+
+    <xacro:macro name ="camera_xacro" params=" index u v">
+        <!-- 机器人的camera -->
+        <link name="camera_${index}_link">
+            <!-- 部件的外观描述 -->
+            <visual>
+                <!-- 相机外观在本体坐标系中心;实际摆放位置由下面 joint 决定 -->
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <!-- 几何形状 -->
+                <geometry>
+                    <!-- 立方体 -->
+                    <box size="${cam_size} ${cam_size} ${cam_size}"/>
+                </geometry>
+                <!-- 材质颜色 -->
+                <material name="black">
+                    <color rgba="0.0 0.0 0.0 1"/>
+                </material>
+            </visual>
+            <collision>
+                    <!-- 相机外观在本体坐标系中心;实际摆放位置由下面 joint 决定 -->
+                    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                    <!-- 几何形状 -->
+                    <geometry>
+                        <!-- 立方体 -->
+                        <box size="${cam_size} ${cam_size} ${cam_size}"/>
+                    </geometry>
+                    <!-- 材质颜色 -->
+            </collision>
+            <xacro:box_inertia m = "0.1" w="${cam_size}" d="${cam_size}" h="${cam_size}" />
+        </link>
+
+        <link name="camera_${index}_optical_link"></link>
+
+        <!-- 机器人的关节，用于组合机器人的部件, type是可动还是不可动 -->
+        <joint name="camera_${index}_joint" type="fixed">
+            <!-- 关节的父部件 -->
+            <parent link="camera_stand_link"/>
+            <!-- 关节的子部件 -->
+            <child link="camera_${index}_link"/>
+            <!-- 物理位置 = dense 角坐标 × dense 步长;z 是贴板高度 -->
+            <!-- 绕 Y 轴 -90°:让相机 body 的 +X 朝前(板子法线),即 x前 y左 z上 -->
+            <origin xyz="${u * dense_step } ${v * dense_step } 0.0015" rpy="0.0 ${-pi/2} 0.0"/>
+        </joint>
+
+        <joint name="camera_${index}_optical_joint" type="fixed">
+            <!-- 关节的父部件 -->
+            <parent link="camera_${index}_link"/>
+            <!-- 关节的子部件 -->
+            <child link="camera_${index}_optical_link"/>
+            <!-- 标准 body -> optical 变换:x右 y下 z前 -->
+            <origin xyz="0 0 0" rpy="${-pi/2} 0.0 ${-pi/2}"/>
+        </joint>
+
+        <gazebo reference="camera_stand_link">
+            <material>Gazebo/Black</material>
+        </gazebo>
+        <gazebo reference="camera_${index}_link">
+            <material>Gazebo/Red</material>
+        </gazebo>
+        
+    </xacro:macro>
+
+    <!-- ======== 9 台实例:顺序 = 代码里的 SOURCE_COORDINATES,绝对不能乱 ======== -->
+    <xacro:camera_xacro index="0" u="-2" v="-2"/>
+    <xacro:camera_xacro index="1" u="-2" v="0"/>
+    <xacro:camera_xacro index="2" u="-2" v="2"/>
+    <xacro:camera_xacro index="3" u="0"  v="-2"/>
+    <xacro:camera_xacro index="4" u="0"  v="0"/>   <!-- 中心相机 -->
+    <xacro:camera_xacro index="5" u="0"  v="2"/>
+    <xacro:camera_xacro index="6" u="2"  v="-2"/>
+    <xacro:camera_xacro index="7" u="2"  v="0"/>
+    <xacro:camera_xacro index="8" u="2"  v="2"/>
+    
+</robot>
